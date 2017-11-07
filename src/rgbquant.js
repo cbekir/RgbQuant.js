@@ -835,22 +835,22 @@
 	// returns uniform pixel data from various img
 	// TODO?: if array is passed, createimagedata, createlement canvas? take a pxlen?
 	function getImageData(img, width) {
-		var can, ctx, imgd, buf8, buf32, height;
+		var can, ctx, imgd, buf8, buf32;
+		var height = Math.floor(width * img.naturalHeight/img.naturalWidth);
 
 		switch (typeOf(img)) {
 			case "HTMLImageElement":
 				can = document.createElement("canvas");
-				can.width = img.naturalWidth;
-				can.height = img.naturalHeight;
-				ctx = can.getContext("2d");
-				ctx.drawImage(img,0,0);
+				can.width = width || img.naturalWidth;
+				can.height = height || img.naturalHeight;
 			case "Canvas":
 			case "HTMLCanvasElement":
 				can = can || img;
-				ctx = ctx || can.getContext("2d");
+				ctx = can.getContext("2d");
 			case "CanvasRenderingContext2D":
 				ctx = ctx || img;
 				can = can || ctx.canvas;
+				ctx.drawImage(img,0,0);
 				imgd = ctx.getImageData(0, 0, can.width, can.height);
 			case "ImageData":
 				imgd = imgd || img;
